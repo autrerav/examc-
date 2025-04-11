@@ -1,0 +1,558 @@
+//lab2_e1.cpp
+//Modify the program to derive the CNC class from the Machine class.
+//Create a new CNC object in main. Add a message in the constructor of Machine and CNC to display "In the Machine constructor", "In the CNC constructor". Display the results.
+//Call the print_description method from the created CNC object. What is displayed?
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Machine {
+private:
+    string name = "general machine";
+
+public:
+    string description = "An instance of Machine class";
+    Machine(string);
+    void print_description();
+};
+
+Machine::Machine(string machine_name) {
+    this->name = machine_name;
+    cout << "Creating an object of the class "
+               "Machine, with name: " << endl
+            << " " << this->name << endl
+            << "Description: "<< endl
+            << " " << description << endl;
+
+}
+
+void Machine::print_description() {
+    cout << "Machine description: " << description << endl;
+}
+
+class CNC : public Machine {
+public:
+    string description = "A computerized numerical control (CNC) machine";
+    CNC(string);
+    void print_description();
+    void print_base_description();
+};
+
+CNC::CNC(string cnc_name) : Machine(cnc_name) {
+    cout << "In the CNC constructor" << endl;
+}
+
+void CNC::print_description() {
+    cout << "CNC description: " << description << endl;
+}
+
+void CNC::print_base_description() {
+    Machine::print_description();
+}
+
+int main() {
+    Machine hammer("super hammer");
+    hammer.print_description();
+    CNC cncMachine("CNC Model X");
+    cncMachine.print_description();
+    cncMachine.print_base_description();
+    
+    return EXIT_SUCCESS;
+}
+
+
+// lab2_e2.cpp
+ 
+//Create a computer program in C++ with the following elements:
+
+// 1.Create a class named Course, with a string variable name and a double array named scores.
+// 2.Create a class named Student, with a string variable name, and with an array of Course objects of length 4.
+// 3.Create a class named Program, with a string variable name, and with an array of Student objects of length 10.
+// 4. Add a method to the Program class that will print the name and the average of the scores of each course.
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Course {
+public:
+    string name;
+    double scores[5];
+
+    Course(string courseName, double courseScores[5]) {
+        name = courseName;
+        for (int i = 0; i < 5; i++) {
+            scores[i] = courseScores[i];
+        }
+    }
+
+    double getAverageScore() {
+        double sum = 0;
+        for (double score : scores) {
+            sum += score;
+        }
+        return sum / 5;
+    }
+};
+
+class Student {
+public:
+    string name;
+    Course courses[4];
+
+    Student(string studentName, Course courseList[4]) : name(studentName), courses{courseList[0], courseList[1], courseList[2], courseList[3]} {}
+};
+
+class Program {
+public:
+    string name;
+    Student students[10];
+
+    Program(string programName, Student studentList[10]) : name(programName), students{studentList[0], studentList[1], studentList[2], studentList[3], studentList[4], studentList[5], studentList[6], studentList[7], studentList[8], studentList[9]} {}
+
+    void printCourseAverages() {
+        cout << "Program: " << name << endl;
+        for (int i = 0; i < 4; i++) {
+            double totalAverage = 0;
+            for (int j = 0; j < 10; j++) {
+                totalAverage += students[j].courses[i].getAverageScore();
+            }
+            cout << "Course: " << students[0].courses[i].name << " - Average Score: " << (totalAverage / 10) << endl;
+        }
+    }
+};
+
+int main() {
+    double sampleScores1[5] = {85, 90, 78, 92, 88};
+    double sampleScores2[5] = {80, 85, 79, 91, 87};
+    double sampleScores3[5] = {75, 80, 85, 90, 95};
+    double sampleScores4[5] = {88, 92, 94, 89, 90};
+
+    Course courses[] = {
+        Course("Python", sampleScores1),
+        Course("C++", sampleScores2),
+        Course("Java", sampleScores3),
+        Course("Pascal", sampleScores4)
+    };
+
+    Student students[10];
+    for (int i = 0; i < 10; i++) {
+        students[i] = Student("Student " + to_string(i + 1), courses);
+    }
+
+    Program program("Computer Science", students);
+    program.printCourseAverages();
+
+    return 0;
+}
+
+
+//lab3ex2
+//Escriba un programa que inserte números enteros del 1 al 12 en la cola. Mostrar todos los elementos contenidos en la cola.
+//Muestra la longitud de la cola utilizando el sizemétodo.
+//Borrar 5 elementos de la cola. Muestra todos los elementos contenidos en la cola y su longitud.
+//Complete el programa con una función que limite la longitud de la cola a un valor dado,
+//por ejemplo 6, y elimine los elementos que excedan el límite. Si se supera el límite, 
+//la función debe mostrar información de que la cola está llena y el elemento se ha borrado.
+//Usando la función, agregue 4 elementos a la cola.
+
+
+
+
+#include <iostream>
+#include <queue>
+using namespace std;
+
+
+void rellenarCola(queue<int> &cola) {
+    for (int i = 1; i <= 12; ++i) {
+        cola.push(i);
+    }
+}
+
+void mostrarCola(queue<int> cola) {
+    cout << "Elementos en la cola: ";
+    while (!cola.empty()) {
+        cout << cola.front() << " ";
+        cola.pop();
+    }
+    cout << "Cola mostrada..." << endl;
+}
+
+
+void borrarCola(queue<int> cola , int n ) {
+    for (int i = 0; i < n && !cola.empty(); ++i) {
+        cola.pop();
+    }
+}
+
+void consultarliimite(queue<int> &cola, int limite) {
+
+    while (cola.size() > limite) {
+        cout << "La cola ha superado el límite. Se elimina el elemento: " << cola.front() << endl;
+        cola.pop();
+    }
+}
+
+void agregarelementos(queue<int> &cola){
+    for (int i = 13; i <= 16; ++i) {
+        cola.push(i);
+        
+    }
+    
+}
+
+int main() {
+    queue<int> cola;
+    
+    rellenarCola(cola);
+    cout << "Cola hecha" << endl;
+
+    mostrarCola(cola);
+    cout << "Longitud de la cola: " << cola.size() << endl;
+    
+    borrarCola(cola, 5);
+    cout << "Borrando los elementos" << endl;
+    
+    mostrarCola(cola);
+    cout << "Longitud de la cola: " << cola.size() << endl;
+    
+    consultarliimite(cola, 6);
+    cout << "consultando el limite la cola" << endl;
+    
+    agregarelementos(cola);
+    cout << "agregando elementos a la cola" << endl;
+
+    consultarliimite(cola, 6);
+    cout << "consultando el limite la cola" << endl;
+
+    mostrarCola(cola);
+    cout << "Longitud final de la cola: " << cola.size() << endl;
+    
+    return 0;
+}
+
+
+
+//lab03t3.cpp
+//1.-Añade una función que:
+    //agrega un nuevo elemento a la cola
+    //aumenta el número único de solicitantes en espera
+//2.-Añade una función que:
+    //eliminar el elemento más antiguo de la cola
+    //muestra un mensaje sobre el número actual de solicitantes en espera (número de solicitantes = tamaño de la cola -1)
+//3.-Añade una función que:
+    //comprueba si el tamaño de la cola ha excedido un cierto número; En tal caso, 
+    //la función debería suspender la posibilidad de que se agreguen más solicitantes.
+    //Muestra un mensaje sobre el servicio suspendido si el tamaño de la cola ha excedido un cierto número
+
+
+#include <iostream>
+#include <queue>
+using namespace std;
+
+class Applicant {
+public:
+  int applicant_num = 0;
+  int time;
+};
+
+void agregarelementos(queue<Applicant> &eit){
+    Applicant i; 
+    eit.push(i);
+    i.applicant_num += 1;  
+
+}
+
+void borrarCola(queue<Applicant> &eit ) {
+    eit.pop();
+    cout << "Tiempo de espera: " << eit.size() << endl;
+
+}
+
+int main() {
+  queue<Applicant> eit;
+  /* creating an Applicant object */
+    agregarelementos(eit);
+    agregarelementos(eit);
+    agregarelementos(eit);
+    agregarelementos(eit);
+
+  
+  /* creating a temporary Applicant object, to assign to it a
+     reference returned by the method `back` */
+     
+  Applicant temp = eit.back();
+  
+  cout << "last applicant number: " << temp.applicant_num
+       << ", queue size: " << eit.size() << endl;
+  
+  // alternative
+  cout << "last applicant number: " << eit.back().applicant_num
+       << ", queue size: " << eit.size() << endl;
+
+  cout << "applicants waiting for service:  " << eit.size() - 1 << endl;
+}
+
+
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <algorithm>
+
+void expandAndReverse(const std::string& inputFile, const std::string& outputFile) {
+    std::ifstream inFile(inputFile);
+    if (!inFile) {
+        std::cerr << "Error al abrir " << inputFile << std::endl;
+        return;
+    }
+    
+    std::vector<std::string> lines;
+    std::string line;
+    
+    while (std::getline(inFile, line)) {
+        std::string expandedLine;
+        for (char c : line) {
+            expandedLine += c;
+            expandedLine += ' '; 
+        }
+        lines.push_back(expandedLine);
+    }
+    
+    inFile.close();
+    
+    std::reverse(lines.begin(), lines.end());
+    
+    std::ofstream outFile(outputFile);
+    if (!outFile) {
+        std::cerr << "Error al abrir " << outputFile << std::endl;
+        return;
+    }
+    
+    for (const auto& expandedLine : lines) {
+        outFile << expandedLine << '\n';
+    }
+    
+    outFile.close();
+    std::cout << "Archivo " << outputFile << " creado con éxito." << std::endl;
+}
+
+int main() {
+    expandAndReverse("bird_up.txt", "bird_usdown.txt");
+    return 0;
+}
+
+
+
+#include <iostream>
+#include <fstream>
+
+int main() {
+    std::ifstream inputFile("data_in.txt");
+    std::ofstream outputFile("data_out.txt");
+
+    if (!inputFile) {
+        std::cerr << "Error al abrir data_in.txt" << std::endl;
+        return 1;
+    }
+    if (!outputFile) {
+        std::cerr << "Error al abrir data_out.txt" << std::endl;
+        return 1;
+    }
+
+    float num, sum = 0;
+    int count = 0;
+    
+    while (inputFile >> num && count < 5) {
+        sum += num;
+        count++;
+    }
+
+    if (count == 0) {
+        std::cerr << "No se encontraron valores válidos en el archivo." << std::endl;
+        return 1;
+    }
+
+    float average = sum / count;
+    outputFile << "Suma," << sum << "\nPromedio," << average << std::endl;
+
+    inputFile.close();
+    outputFile.close();
+    
+    std::cout << "Proceso completado. Verifique data_out.txt" << std::endl;
+    return 0;
+}
+
+
+#include <iostream>
+#include <fstream>
+#include <map>
+#include <vector>
+
+const std::string SUBSTITUTION_ORDER = "eaoidhnrstuycfglmwbkp qxz.";
+
+int main() {
+    std::string filename = "message.txt";  // Nombre del archivo de texto
+    std::ifstream file(filename);
+    std::ofstream outputFile("decodemessage.txt");
+
+    if (!file) {
+        std::cerr << "No se pudo abrir el archivo." << std::endl;
+        return 1;
+    }
+     if (!outputFile) {
+        std::cerr << "Error al abrir data_out.txt" << std::endl;
+        return 1;
+    }
+
+    std::vector<char> char_list; 
+
+    std::map<char, int> freq;
+    char ch;
+    while (file.get(ch)) {  
+        freq[ch]++;
+    }
+    
+    file.close();
+    
+    std::cout << "Frecuencia de caracteres en " << filename << ":\n";
+    for (const auto& pair : freq) {
+        std::cout << "'" << pair.first << "': " << pair.second << std::endl;
+        char_list.push_back(pair.first);
+
+    }
+    std::map<char, char> substitution_map;
+    size_t size = std::min(char_list.size(), SUBSTITUTION_ORDER.size());
+    for (size_t i = 0; i < size; ++i) {
+        substitution_map[char_list[i]] = SUBSTITUTION_ORDER[i];
+    }
+     // Leer el archivo nuevamente para realizar la sustitución
+    file.open(filename);
+    while (file.get(ch)) {
+        if (substitution_map.find(ch) != substitution_map.end()) {
+            outputFile.put(substitution_map[ch]);
+        } else {
+            outputFile.put(ch);
+        }
+    }
+    file.close();
+    outputFile.close();
+
+    std::cout << "Proceso completado. Mensaje decodificado guardado en decodemessage.txt" << std::endl;
+    return 0;
+
+}
+
+
+#include <iostream>
+#include <thread>
+#include <vector>
+
+void msgy(const std::string& mensaje) {
+    std::cout << "Mensaje: " << mensaje << std::endl;
+}
+
+int main() {
+    std::vector<std::string> mensajes = {"Hola", "Mundo", "desde", "varios", "hilos"};
+    std::vector<std::thread> hilos;
+
+    for (const auto& msg : mensajes) {
+        hilos.emplace_back(msgy, msg);
+    }
+
+    for (auto& hilo : hilos) {
+        hilo.join(); // Esperar a que terminen todos los hilos
+    }
+
+    return 0;
+}
+
+
+
+#include <iostream>
+#include <thread>
+#include <vector>
+
+void msgy(const std::string& mensaje) {
+    std::cout << "Mensaje: " << mensaje << std::endl;
+}
+
+int main() {
+    std::vector<std::string> mensajes = {"Hola", "Mundo", "desde", "varios", "hilos"};
+    std::vector<std::thread> hilos;
+
+    for (const auto& msg : mensajes) {
+        hilos.emplace_back(msgy, msg);
+    }
+
+    for (auto& hilo : hilos) {
+        hilo.join(); // Esperar a que terminen todos los hilos
+    }
+
+    return 0;
+}
+
+
+#include <iostream>
+#include <thread>
+
+void mostrarID(const std::string& nombre) {
+    std::cout << "ID del hilo [" << nombre << "]: " << std::this_thread::get_id() << std::endl;
+}
+
+int main() {
+    std::cout << "ID del hilo principal: " << std::this_thread::get_id() << std::endl;
+
+    std::thread t1(mostrarID, "Hilo 1");
+    std::thread t2(mostrarID, "Hilo 2");
+
+    t1.join();
+    t2.join();
+
+    std::cout << "Número de hilos soportados: " << std::thread::hardware_concurrency() << std::endl;
+
+    return 0;
+}
+
+
+
+#include <iostream>
+#include <thread>
+#include <array>
+#include <mutex>
+
+std::mutex mtx;
+int sumaTotal = 0;
+
+void sumar(int valor, int veces) {
+    for (int i = 0; i < veces; ++i) {
+        std::lock_guard<std::mutex> lock(mtx); 
+        sumaTotal += valor;
+    }
+}
+
+int main() {
+    std::array<int, 3> numeros = {1, 2, 3};
+    const int veces = 5;
+
+    std::thread t1(sumar, numeros[0], veces);
+    std::thread t2(sumar, numeros[1], veces);
+    std::thread t3(sumar, numeros[2], veces);
+
+    t1.join();
+    t2.join();
+    t3.join();
+
+    std::cout << "Suma total: " << sumaTotal << std::endl;
+
+    return 0;
+}
+
+
+
+
+
+
+
+
